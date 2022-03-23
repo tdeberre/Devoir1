@@ -11,7 +11,7 @@ use App\Entity\Actu;
 
 class DefaultController extends AbstractController
 {
-    #[Route('defaultcontroller/index.html.twig', name: 'index')]
+    #[Route('accueil', name: 'index')]
     public function index(): Response
     {
         $repoActu = $this->getDoctrine()->getRepository(Actu::class);
@@ -21,7 +21,7 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    #[Route('defaultcontroller/actu.html.twig', name: 'actu')]
+    #[Route('actualite', name: 'actu')]
     public function actu(Request $request): Response
     {
         $actu = new Actu();
@@ -41,5 +41,13 @@ class DefaultController extends AbstractController
             'form' => $form->createView()
         ]);
 
+    }
+
+    #[Route('login', name: 'app_login')]
+    public function connexion(): Response
+    {
+        return $this->render('security/login.html.twig', [
+
+        ]);
     }
 }
