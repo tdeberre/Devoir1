@@ -14,8 +14,10 @@ class DefaultController extends AbstractController
     #[Route('defaultcontroller/index.html.twig', name: 'index')]
     public function index(): Response
     {
+        $repoActu = $this->getDoctrine()->getRepository(Actu::class);
+        $listactu = $repoActu->findAll();
         return $this->render('defaultcontroller/index.html.twig', [
-
+            'listactu' => $listactu
         ]);
     }
 
@@ -24,9 +26,6 @@ class DefaultController extends AbstractController
     {
         $actu = new Actu();
         $form = $this->createForm(FormActuType::class, $actu);
-        return $this->render('defaultcontroller/actu.html.twig', [
-            'form' => $form->createView()
-        ]);
 
         if($request->isMethod('POST')){
             $form->handleRequest($request);
@@ -34,10 +33,13 @@ class DefaultController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($actu);
                 $em->flush();
-                $this->addFlash('notice','Message envoyé');
-                return $this->redirectToRoute('contact');
+                $this->addFlash('notice','Actualité envoyée');
+                return $this->redirectToRoute('actu');
             }   
         }
-        
+        return $this->render('defaultcontroller/actu.html.twig', [
+            'form' => $form->createView()
+        ]);
+
     }
 }
